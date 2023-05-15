@@ -1,10 +1,12 @@
-import {Link} from 'react-router-dom'
 import { useState } from 'react'
+import { publicRequest } from '../../hooks/requestMethods'
+import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 
 export default function SignUp() {
     const [credentials, setCredentials] = useState({})
-
+    const navigate = useNavigate()
     const handleChange = (e) => {
         const { id, value } = e.target
         setCredentials((prevCredentials) => ({
@@ -15,8 +17,14 @@ export default function SignUp() {
     }
     const handleSubmit = (e) => {
         e.preventDefault()
-
-        console.log(credentials)
+      
+        publicRequest().post('auth/register',credentials).then((res)=>{
+        
+            navigate('/login')
+        }).catch((err)=>{
+            console.log(err)
+        }
+        )
     }
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 ">

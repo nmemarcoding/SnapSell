@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom"
+import { publicRequest } from '../../hooks/requestMethods'
 import { useState } from "react"
+import useStore from '../../store';
+import { useNavigate } from 'react-router-dom'
+
 export default function Login() {
+    const addUserInfo = useStore((state) => state.addUserInfo)
+    const navigate = useNavigate()
+     const [cordentials, setCordentials] = useState({username:"",password:""})
     const [credentials, setCredentials] = useState({})
 
     const handleChange = (e) => {
@@ -13,7 +20,21 @@ export default function Login() {
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        console.log(credentials)
+        publicRequest().post("auth/login", credentials)
+            .then((res) => {
+                addUserInfo(res.data)
+                if (res.data.isAdmin) {
+                    navigate('/admin')
+                }
+                else {
+                    navigate('/')
+                }
+                
+                
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
