@@ -1,4 +1,4 @@
-import { Fragment,useState } from 'react'
+import { Fragment,useState,useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { publicRequest } from '../../hooks/requestMethods'
@@ -29,6 +29,7 @@ export default function AdminPage() {
     const userInfo = useStore((state) => state.userInf);
 
     const [productInfo, setProductInfo] = useState({});
+    const [productList, setProductList] = useState();
 
     const handleInputChange = (e) => {
         const { id, value } = e.target;
@@ -66,6 +67,29 @@ export default function AdminPage() {
 
 
     };
+    // format product list by title given in search bar onchange
+    const formatProductList = (e) => {
+        
+        const value  = e.target.value;
+        console.log(value);
+        const filteredProductList = productList.filter((product) => {
+            return product.title.toLowerCase().includes(value.toLowerCase());
+        });
+        
+       
+    };
+    
+    // use ifect to get all products
+    useEffect(() => {
+        publicRequest().get("product")
+        .then((res) => {
+            console.log(res.data);
+            setProductList(res.data);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    }, [])
   return (
     <>
     
@@ -266,7 +290,7 @@ export default function AdminPage() {
 
 <div className="w-full px-3 mb-6">
   <label for="search" className="block text-gray-700 text-sm font-bold mb-2">Search:</label>
-  <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="search" type="text" placeholder="Search products" />
+  <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="search" type="text" placeholder="Search products" onChange={formatProductList} />
 </div>
 
 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -277,106 +301,34 @@ export default function AdminPage() {
                 <th scope="col" className="px-6 py-3">
                     Product name
                 </th>
-                <th scope="col" className="px-6 py-3">
-                    Color
-                </th>
+                
                 <th scope="col" className="px-6 py-3">
                     Category
                 </th>
                 <th scope="col" className="px-6 py-3">
                     Price
                 </th>
-                <th scope="col" className="px-6 py-3">
-                    Action
-                </th>
+                
             </tr>
         </thead>
         <tbody>
-            <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+            
+            {/* map trow productList */}
+            {productList?.map((item) => (
+            <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700" key={item._id}>
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Apple MacBook Pro 17"
+                    {item.title}
                 </th>
                 <td className="px-6 py-4">
-                    Silver
+                    {item.categories}
                 </td>
                 <td className="px-6 py-4">
-                    Laptop
+                    ${item.price} 
                 </td>
-                <td className="px-6 py-4">
-                    $2999
-                </td>
-                <td className="px-6 py-4">
-                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
+                
             </tr>
-            <tr className="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Microsoft Surface Pro
-                </th>
-                <td className="px-6 py-4">
-                    White
-                </td>
-                <td className="px-6 py-4">
-                    Laptop PC
-                </td>
-                <td className="px-6 py-4">
-                    $1999
-                </td>
-                <td className="px-6 py-4">
-                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
-            <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Magic Mouse 2
-                </th>
-                <td className="px-6 py-4">
-                    Black
-                </td>
-                <td className="px-6 py-4">
-                    Accessories
-                </td>
-                <td className="px-6 py-4">
-                    $99
-                </td>
-                <td className="px-6 py-4">
-                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
-            <tr className="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Google Pixel Phone
-                </th>
-                <td className="px-6 py-4">
-                    Gray
-                </td>
-                <td className="px-6 py-4">
-                    Phone
-                </td>
-                <td className="px-6 py-4">
-                    $799
-                </td>
-                <td className="px-6 py-4">
-                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Apple Watch 5
-                </th>
-                <td className="px-6 py-4">
-                    Red
-                </td>
-                <td className="px-6 py-4">
-                    Wearables
-                </td>
-                <td className="px-6 py-4">
-                    $999
-                </td>
-                <td className="px-6 py-4">
-                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
+            ))}
+            
         </tbody>
     </table>
 </div>
