@@ -1,6 +1,8 @@
-import { Fragment } from 'react'
+import { Fragment,useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { publicRequest } from '../../hooks/requestMethods'
+import useStore from '../../store';
 
 const user = {
   name: 'Tom Cook',
@@ -24,6 +26,46 @@ function classNames(...classes) {
 }
 
 export default function AdminPage() {
+    const userInfo = useStore((state) => state.userInf);
+
+    const [productInfo, setProductInfo] = useState({});
+
+    const handleInputChange = (e) => {
+        const { id, value } = e.target;
+        setProductInfo({ ...productInfo, [id]: value });
+        console.log(productInfo);
+    };
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        
+       
+        // adding access token to productInfo object
+        const productInfoObject = {...productInfo, token: userInfo.accessToken}
+
+        // sending productInfoObject to backend
+        publicRequest().post("product", productInfoObject)
+        .then((res) => {
+            console.log(res);
+           alert("Product added successfully");
+
+
+            // refresh the page
+            window.location.reload();
+          
+            
+
+        }
+        )
+        .catch((err) => {
+            console.log(err);
+        }
+        )
+
+
+
+
+    };
   return (
     <>
     
@@ -182,151 +224,157 @@ export default function AdminPage() {
         </header>
         <main>
           <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 w-full">
-          <div class="w-full">
-  <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-    <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="productId">
-        Product ID
+          <div className="w-full">
+  <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleFormSubmit}>
+    <div className="mb-4">
+      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="productId">
+        Product Title
       </label>
-      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="productId" type="text" placeholder="Product ID"/>
+      <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" type="text" placeholder="Product Title" onChange={handleInputChange} value={productInfo?.title}/>
     </div>
-    <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="productName">
-        Product Name
+    <div className="mb-4">
+      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="productName">
+        Product description
       </label>
-      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="productName" type="text" placeholder="Product Name"/>
+      <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="desc" type="text" placeholder="Product Description" onChange={handleInputChange}/>
     </div>
-    <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="productPrice">
+    <div className="mb-4">
+      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="productPrice">
+        Product Image
+      </label>
+      <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="img" type="text" placeholder="Product Image" onChange={handleInputChange}/>
+    </div>
+    <div className="mb-4">
+      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="productQuantity">
+        Product Category
+      </label>
+      <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="categories" type="text" placeholder="Product Categoty" onChange={handleInputChange}/>
+    </div>
+    <div className="mb-6">
+      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="productQuantity">
         Product Price
       </label>
-      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="productPrice" type="text" placeholder="Product Price"/>
+      <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="price" type="text" placeholder="Product Price" onChange={handleInputChange}/>
     </div>
-    <div class="mb-6">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="productQuantity">
-        Product Quantity
-      </label>
-      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="productQuantity" type="text" placeholder="Product Quantity"/>
-    </div>
-    <div class="flex items-center justify-between">
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full" type="button">
+    <div className="flex items-center justify-between">
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full" type="button" onClick={handleFormSubmit}>
         Add Product
       </button>
     </div>
   </form>
 </div>
 
-<div class="w-full px-3 mb-6">
-  <label for="search" class="block text-gray-700 text-sm font-bold mb-2">Search:</label>
-  <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="search" type="text" placeholder="Search products"/>
+<div className="w-full px-3 mb-6">
+  <label for="search" className="block text-gray-700 text-sm font-bold mb-2">Search:</label>
+  <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="search" type="text" placeholder="Search products" />
 </div>
 
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+<div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+<div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                     Product name
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                     Color
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                     Category
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                     Price
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                     Action
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     Apple MacBook Pro 17"
                 </th>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     Silver
                 </td>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     Laptop
                 </td>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     $2999
                 </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                <td className="px-6 py-4">
+                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                 </td>
             </tr>
-            <tr class="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <tr className="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     Microsoft Surface Pro
                 </th>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     White
                 </td>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     Laptop PC
                 </td>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     $1999
                 </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                <td className="px-6 py-4">
+                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                 </td>
             </tr>
-            <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     Magic Mouse 2
                 </th>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     Black
                 </td>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     Accessories
                 </td>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     $99
                 </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                <td className="px-6 py-4">
+                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                 </td>
             </tr>
-            <tr class="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <tr className="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     Google Pixel Phone
                 </th>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     Gray
                 </td>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     Phone
                 </td>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     $799
                 </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                <td className="px-6 py-4">
+                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                 </td>
             </tr>
             <tr>
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     Apple Watch 5
                 </th>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     Red
                 </td>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     Wearables
                 </td>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                     $999
                 </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                <td className="px-6 py-4">
+                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                 </td>
             </tr>
         </tbody>
