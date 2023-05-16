@@ -1,4 +1,5 @@
 import { BrowserRouter as Router,Routes,Route} from 'react-router-dom';
+import AdminPage from './pages/AdminPage/AdminPage';
 import Login from './pages/LoginPage/Login';
 import SignUp from './pages/SignUpPage/SignUp';
 import useStore from './store';
@@ -18,7 +19,7 @@ function App() {
               <Route path="/signup" element={<SignUp/>}/>
               <Route path="/login" element={<Login/>}/>
               {/* show admin oage if use risAmin is true */}
-              {userInfo.isAdmin && <Route path="/admin" element={<h1>Admin</h1>}/>}
+              {userInfo.isAdmin && <Route path="/admin" element={<AdminPage/>}/>}
               
               
             </Routes>
