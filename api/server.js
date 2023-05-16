@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const authRoute = require("./routes/auth.js");
-
+const productRoute = require("./routes/product.js");
 
 require('dotenv').config();
 
@@ -23,6 +23,7 @@ mongoose
 })
 
 app.use("/api/auth", authRoute);
+app.use("/api/product", productRoute);
 
 const port = process.env.PORT || 3002;
 
