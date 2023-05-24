@@ -69,14 +69,17 @@ export default function AdminPage() {
     };
     // format product list by title given in search bar onchange
     const formatProductList = (e) => {
-        
-        const value  = e.target.value;
-        console.log(value);
-        const filteredProductList = productList.filter((product) => {
-            return product.title.toLowerCase().includes(value.toLowerCase());
-        });
-        
-       
+      const value = e.target.value;
+      const sortedProductList = [...productList].sort((a, b) => {
+        if (a.title.toLowerCase().includes(value.toLowerCase())) {
+          return -1;
+        } else if (b.title.toLowerCase().includes(value.toLowerCase())) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+      setProductList(sortedProductList);
     };
     
     // use ifect to get all products
