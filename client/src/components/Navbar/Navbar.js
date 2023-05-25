@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline';
+import { Link } from 'react-router-dom';
 import useStore from '../../store';
 
 const navigation = [
@@ -15,6 +16,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(!!userInfo._id);
   const [searchQuery, setSearchQuery] = useState('');
+  const [cartCount, setCartCount] = useState(0);
 
   const deleteUserInfo = useStore((state) => state.deleteUserInfo);
   const handleLogout = () => {
@@ -25,10 +27,15 @@ export default function Navbar() {
   const handleSearch = (event) => {
     event.preventDefault(); // prevent the default form submission behavior
     setSearchQuery(event.target.value); 
-   
-    
-      window.location.href = `/Product/${searchQuery}`; // redirect to the Product/:value page
-   
+    window.location.href = `/Product/${searchQuery}`; // redirect to the Product/:value page
+  };
+
+  const handleAddToCart = () => {
+    setCartCount(cartCount + 1);
+  };
+
+  const handleRemoveFromCart = () => {
+    setCartCount(cartCount - 1);
   };
 
   return (
@@ -88,6 +95,14 @@ export default function Navbar() {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+          <button
+            type="button"
+            className="text-sm font-semibold leading-6 text-gray-900 mr-40"
+            onClick={handleAddToCart}
+          >
+            <span aria-hidden="true">Cart</span>
+            <span className="ml-1">{cartCount}</span>
+          </button>
           {isLoggedIn ? (
             <a href="#" className="text-sm font-semibold leading-6 text-gray-900" onClick={handleLogout}>
               Sign out <span aria-hidden="true">&rarr;</span>
@@ -134,6 +149,16 @@ export default function Navbar() {
                 </li>
               ))}
             </ul>
+          </div>
+          <div className="mt-6">
+            <button
+              type="button"
+              className="block px-4 py-3 text-sm font-semibold leading-6 text-gray-900"
+              onClick={handleAddToCart}
+            >
+              <span aria-hidden="true">Cart</span>
+              <span className="ml-1">{cartCount}</span>
+            </button>
           </div>
           <div className="mt-6">
             {isLoggedIn ? (
