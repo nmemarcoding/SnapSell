@@ -34,6 +34,24 @@ router.get('/', async (req, res) => {
 }
 );
 
+// get products based on search query
+router.get('/:search', async (req, res) => {
+    const query = req.params.search;
+    try {
+        const products = await Product.find({
+            $or: [
+                { title: { $regex: query, $options: 'i' } },
+                { description: { $regex: query, $options: 'i' } }
+            ]
+        });
+        res.status(200).json(products);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+
+
 
 
 
