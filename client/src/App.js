@@ -3,6 +3,7 @@ import AdminPage from './pages/AdminPage/AdminPage';
 import Login from './pages/LoginPage/Login';
 import SignUp from './pages/SignUpPage/SignUp';
 import useStore from './store';
+import HomePage from './pages/HomePage/HomePage';
 
 
 function App() {
@@ -15,7 +16,8 @@ function App() {
           <div className="app ">
             <Routes>
               
-                  
+          
+              <Route path="/" element={<HomePage/>}/>
               <Route path="/signup" element={<SignUp/>}/>
               <Route path="/login" element={<Login/>}/>
               {/* show admin oage if use risAmin is true */}
