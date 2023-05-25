@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import useStore from '../../store';
+
 const navigation = [
   { name: 'Shop', href: '#' },
   { name: 'Categories', href: '#' },
@@ -10,18 +11,22 @@ const navigation = [
 ];
 
 export default function Navbar() {
-    const userInfo = useStore((state) => state.userInf);
-    console.log(!!userInfo._id);
+  const userInfo = useStore((state) => state.userInf);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(!!userInfo._id);
+  const [searchQuery, setSearchQuery] = useState('');
 
-//   onclick to delete user info
-    const deleteUserInfo = useStore((state) => state.deleteUserInfo);
-    const handleLogout = () => {
-        deleteUserInfo();
-        setIsLoggedIn(false);
-    }
+  const deleteUserInfo = useStore((state) => state.deleteUserInfo);
+  const handleLogout = () => {
+    deleteUserInfo();
+    setIsLoggedIn(false);
+  };
+
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value);
     
+  };
+
   return (
     <header className="absolute inset-x-0 top-0 z-50">
       <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
@@ -34,6 +39,22 @@ export default function Navbar() {
               alt=""
             />
           </a>
+          <div className="lg:flex-1 flex justify-center">
+            <div className="relative rounded-md shadow-sm w-full">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                
+              </div>
+              <input
+                type="text"
+                name="search"
+                id="search"
+                className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={handleSearch}
+              />
+            </div>
+          </div>
         </div>
         <div className="flex lg:hidden">
           <button
@@ -62,6 +83,22 @@ export default function Navbar() {
               Log in <span aria-hidden="true">&rarr;</span>
             </a>
           )}
+        </div>
+        <div className="lg:hidden">
+          <div className="relative rounded-md shadow-sm hidden lg:block">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              
+            </div>
+            <input
+              type="text"
+              name="search"
+              id="search"
+              className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+              placeholder="Search"
+              value={searchQuery}
+              onChange={handleSearch}
+            />
+          </div>
         </div>
       </nav>
       <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -109,6 +146,22 @@ export default function Navbar() {
                 Log in <span aria-hidden="true">&rarr;</span>
               </a>
             )}
+          </div>
+          <div className="mt-6 flex justify-center">
+            <div className="relative rounded-md shadow-sm w-full">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                
+              </div>
+              <input
+                type="text"
+                name="search"
+                id="search"
+                className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={handleSearch}
+              />
+            </div>
           </div>
         </Dialog.Panel>
       </Dialog>
