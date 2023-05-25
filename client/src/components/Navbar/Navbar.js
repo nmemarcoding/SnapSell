@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-
+import useStore from '../../store';
 const navigation = [
   { name: 'Shop', href: '#' },
   { name: 'Categories', href: '#' },
@@ -10,8 +10,18 @@ const navigation = [
 ];
 
 export default function Navbar() {
+    const userInfo = useStore((state) => state.userInf);
+    console.log(!!userInfo._id);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!userInfo._id);
 
+//   onclick to delete user info
+    const deleteUserInfo = useStore((state) => state.deleteUserInfo);
+    const handleLogout = () => {
+        deleteUserInfo();
+        setIsLoggedIn(false);
+    }
+    
   return (
     <header className="absolute inset-x-0 top-0 z-50">
       <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
@@ -43,9 +53,15 @@ export default function Navbar() {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            Log in <span aria-hidden="true">&rarr;</span>
-          </a>
+          {isLoggedIn ? (
+            <a href="#" className="text-sm font-semibold leading-6 text-gray-900" onClick={handleLogout}>
+              Sign out <span aria-hidden="true">&rarr;</span>
+            </a>
+          ) : (
+            <a href="/login" className="text-sm font-semibold leading-6 text-gray-900">
+              Log in <span aria-hidden="true">&rarr;</span>
+            </a>
+          )}
         </div>
       </nav>
       <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -84,9 +100,15 @@ export default function Navbar() {
             </ul>
           </div>
           <div className="mt-6">
-            <a href="#" className="block px-4 py-3 text-sm font-semibold leading-6 text-gray-900">
-              Log in <span aria-hidden="true">&rarr;</span>
-            </a>
+            {isLoggedIn ? (
+              <a href="#" className="block px-4 py-3 text-sm font-semibold leading-6 text-gray-900" onClick={handleLogout}>
+                Sign out <span aria-hidden="true">&rarr;</span>
+              </a>
+            ) : (
+              <a href="/login" className="block px-4 py-3 text-sm font-semibold leading-6 text-gray-900">
+                Log in <span aria-hidden="true">&rarr;</span>
+              </a>
+            )}
           </div>
         </Dialog.Panel>
       </Dialog>

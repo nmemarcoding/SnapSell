@@ -5,7 +5,7 @@ import ImageSlider from '../../components/Navbar/ImageSlider/ImageSlider';
 export default function Home() {
   return (
     <div>
-      <Navbar />
+        <Navbar isLoggedIn={true} />   
       
       <main>
         <div className="relative pt-32 pb-10 px-6 sm:px-8 lg:px-0">
