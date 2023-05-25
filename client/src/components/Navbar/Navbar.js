@@ -23,7 +23,12 @@ export default function Navbar() {
   };
 
   const handleSearch = (event) => {
-    setSearchQuery(event.target.value);
+    event.preventDefault(); // prevent the default form submission behavior
+    setSearchQuery(event.target.value); 
+   
+    
+      window.location.href = `/Product/${searchQuery}`; // redirect to the Product/:value page
+   
   };
 
   return (
@@ -49,15 +54,17 @@ export default function Navbar() {
                 Search
               </label>
             </div>
-            <input
-              type="text"
-              name="search"
-              id="search"
-              className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
-              placeholder="Search"
-              value={searchQuery}
-              onChange={handleSearch}
-            />
+            <form onSubmit={handleSearch}>
+              <input
+                type="text"
+                name="search"
+                id="search"
+                className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+              />
+            </form>
           </div>
         </div>
         <div className="flex lg:hidden">
@@ -139,7 +146,7 @@ export default function Navbar() {
               </a>
             )}
           </div>
-            <div className="mt-6">
+          <div className="mt-6">
             <div className="relative rounded-md shadow-sm">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 
@@ -147,15 +154,17 @@ export default function Navbar() {
                   Search
                 </label>
               </div>
-              <input
-                type="text"
-                name="search"
-                id="search"
-                className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
-                placeholder="Search"
-                value={searchQuery}
-                onChange={handleSearch}
-              />
+              <form onSubmit={handleSearch}>
+                <input
+                  type="text"
+                  name="search"
+                  id="search"
+                  className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                  placeholder="Search"
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                />
+              </form>
             </div>
           </div>
         </Dialog.Panel>
