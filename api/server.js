@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const authRoute = require("./routes/auth.js");
 const productRoute = require("./routes/product.js");
+const cartRoute = require("./routes/cart.js");
 
 require('dotenv').config();
 
@@ -24,6 +25,7 @@ mongoose
 
 app.use("/api/auth", authRoute);
 app.use("/api/product", productRoute);
+app.use("/api/cart", cartRoute);
 
 const port = process.env.PORT || 3002;
 
