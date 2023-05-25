@@ -1,22 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
+import { publicRequest } from '../../hooks/requestMethods';
 
 export default function ProductListPage() {
   const [nameFilter, setNameFilter] = useState('');
   const [priceFilter, setPriceFilter] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
   const [cart, setCart] = useState([]);
+  const [products, setProducts] = useState([]);
 
-  const products = [
-    { id: 1, name: 'apple', price: 10, image: 'https://via.placeholder.com/150' },
-    { id: 2, name: 'Product 2', price: 20, image: 'https://via.placeholder.com/150' },
-    { id: 3, name: 'Product 3', price: 30, image: 'https://via.placeholder.com/150' },
-    { id: 4, name: 'Product 4', price: 40, image: 'https://via.placeholder.com/150' },
-    { id: 5, name: 'Product 5', price: 50, image: 'https://via.placeholder.com/150' },
-  ];
+  useEffect(() => {
+    
+    // geting search from url.href
+    const searchInput = window.location.href.split('/')[4];
+    
+      publicRequest().get(`product/${searchInput}`)
+    .then((res) => {
+        console.log(res.data);
+        setProducts(res.data);
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+      
+  }, []);
+  
 
   const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(nameFilter.toLowerCase()) &&
+    product.title.toLowerCase().includes(nameFilter.toLowerCase()) &&
     (priceFilter === '' || product.price <= parseInt(priceFilter))
   );
 
@@ -73,10 +84,10 @@ export default function ProductListPage() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {sortedProducts.map((product) => (
-            <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden transform hover:-translate-y-1 transition-all duration-300">
+            <div key={product._id} className="bg-white rounded-lg shadow-md overflow-hidden transform hover:-translate-y-1 transition-all duration-300">
               <div className="p-4">
-                <img src={product.image} alt={product.name} className="w-full mb-4 rounded-md shadow-md" />
-                <div className="font-bold text-lg mb-2">{product.name}</div>
+                <img src="https://hwpi.harvard.edu/sites/hwpi.harvard.edu/files/assetslibrary/files/card-600x400.png?m=1575485000" alt={product.title} className="w-full mb-4 rounded-md shadow-md" />
+                <div className="font-bold text-lg mb-2">{product.title}</div>
                 <div className="text-gray-700 text-base">${product.price}</div>
               </div>
               <div className="p-4">
