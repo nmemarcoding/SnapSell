@@ -34,8 +34,16 @@ export default function ProductListPage() {
   const sortedProducts = filteredProducts.sort((a, b) => {
     if (sortOrder === 'asc') {
       return a.price - b.price;
-    } else {
+    } else if (sortOrder === 'desc') {
       return b.price - a.price;
+    } else {
+      if (a.categories === sortOrder && b.categories !== sortOrder) {
+        return -1;
+      } else if (a.categories !== sortOrder && b.categories === sortOrder) {
+        return 1;
+      } else {
+        return 0;
+      }
     }
   });
 
@@ -76,6 +84,13 @@ export default function ProductListPage() {
             >
               <option value="asc">Price: Low to High</option>
               <option value="desc">Price: High to Low</option>
+              {Array.from(new Set(products.map((product) => product.categories)))
+                .sort()
+                .map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
               <svg
