@@ -57,6 +57,63 @@ router.post('/', async (req, res) => {
   }
 });
 
+// delete an item from the cart by user id and product id
+router.delete('/', async (req, res) => {
+  try {
+    const userId = req.body.userId;
+    const productId = req.body.productId;
+    const deleteQuantity = req.body.deleteQuantity;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: 'Invalid userId' });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).json({ message: 'Invalid productId' });
+    }
+
+    const user = await User.findOne({ _id: userId });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    let cart = await Cart.findOne({ user }).populate('items.product');
+    
+    if (cart == null) {
+      return res.status(404).json({ message: 'Cart not found' });
+    }
+
+    const item = cart.items.find(item => item.product._id.toString() === productId.toString());
+    console.log(item);
+    if (!item) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+    
+
+    if (item.quantity <= deleteQuantity) {
+      cart.items = cart.items.filter(item => item.product._id.toString() !== productId.toString());
+    } else {
+      item.quantity -= deleteQuantity;
+    }
+
+    // Calculate the total price and total items
+    let totalPrice = 0;
+    let totalItems = 0;
+    for (let i = 0; i < cart.items.length; i++) {
+      totalPrice += cart.items[i].product.price * cart.items[i].quantity;
+      totalItems += cart.items[i].quantity;
+    }
+
+    cart.totalPrice = totalPrice;
+    cart.totalItems = totalItems;
+    await cart.save();
+    res.json(cart);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+   
+  }
+});
+
 // get the cart for a user by userId and populate the items with the product details
 router.get('/', async (req, res) => {
   try {
