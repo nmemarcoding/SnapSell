@@ -5,6 +5,7 @@ import SignUp from './pages/SignUpPage/SignUp';
 import useStore from './store';
 import HomePage from './pages/HomePage/HomePage';
 import ProductListPage from './pages/ProductListPage/ProductListPage';
+import CartPage from './pages/CartPage/CartPage';
 
 
 function App() {
@@ -24,6 +25,8 @@ function App() {
               <Route path="/product/:id" element={<ProductListPage/>}/>
               {/* show admin oage if use risAmin is true */}
               {userInfo.isAdmin && <Route path="/admin" element={<AdminPage/>}/>}
+              {/* cartPage */}
+              <Route path="/cart" element={<CartPage/>}/>
               
               
             </Routes>

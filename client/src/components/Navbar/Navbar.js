@@ -96,14 +96,10 @@ export default function Navbar() {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <button
-            type="button"
-            className="text-sm font-semibold leading-6 text-gray-900 mr-40"
-            onClick={handleAddToCart}
-          >
+          <Link to="/cart" className="text-sm font-semibold leading-6 text-gray-900 mr-40">
             <span aria-hidden="true">Cart</span>
             <span className="ml-1">{cartCount}</span>
-          </button>
+          </Link>
           {isLoggedIn ? (
             <a href="#" className="text-sm font-semibold leading-6 text-gray-900" onClick={handleLogout}>
               Sign out <span aria-hidden="true">&rarr;</span>
@@ -152,14 +148,10 @@ export default function Navbar() {
             </ul>
           </div>
           <div className="mt-6">
-            <button
-              type="button"
-              className="block px-4 py-3 text-sm font-semibold leading-6 text-gray-900"
-              onClick={handleAddToCart}
-            >
+            <Link to="/cart" className="block px-4 py-3 text-sm font-semibold leading-6 text-gray-900">
               <span aria-hidden="true">Cart</span>
               <span className="ml-1">{cartCount}</span>
-            </button>
+            </Link>
           </div>
           <div className="mt-6">
             {isLoggedIn ? (
