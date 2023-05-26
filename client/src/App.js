@@ -6,6 +6,7 @@ import useStore from './store';
 import HomePage from './pages/HomePage/HomePage';
 import ProductListPage from './pages/ProductListPage/ProductListPage';
 import CartPage from './pages/CartPage/CartPage';
+import OrderReview from './pages/OrderReview/OrderReview';
 
 
 function App() {
@@ -27,7 +28,9 @@ function App() {
               {userInfo.isAdmin && <Route path="/admin" element={<AdminPage/>}/>}
               {/* cartPage */}
               <Route path="/cart" element={<CartPage/>}/>
-              
+              {/* <OrderReview page */}
+             <Route path="/orderreview" element={<OrderReview/>}/> 
+
               
             </Routes>
           </div>
