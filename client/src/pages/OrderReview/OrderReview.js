@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Navbar from '../../components/Navbar/Navbar'
 
 export default function OrderReview() {
@@ -30,6 +31,12 @@ export default function OrderReview() {
       ...prevState,
       [name]: value
     }))
+  }
+
+  const Navigate = useNavigate()
+
+  const handlePlaceOrderClick = () => {
+    Navigate('/orderdetails')
   }
 
   return (
@@ -122,7 +129,7 @@ export default function OrderReview() {
             </div>
           )}
         </div>
-        <button className="mt-6 bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded">
+        <button className="mt-6 bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded" onClick={handlePlaceOrderClick}>
           Place Order
         </button>
       </div>

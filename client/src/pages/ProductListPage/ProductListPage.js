@@ -48,6 +48,7 @@ export default function ProductListPage() {
   });
 
   const addToCart = (product) => {
+    console.log(product._id);
     setCart([...cart, product]);
   };
 
@@ -120,6 +121,7 @@ export default function ProductListPage() {
               </div>
               <div className="p-4">
                 <button
+                  
                   onClick={() => addToCart(product)}
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md mr-2"
                 >

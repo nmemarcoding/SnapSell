@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage/HomePage';
 import ProductListPage from './pages/ProductListPage/ProductListPage';
 import CartPage from './pages/CartPage/CartPage';
 import OrderReview from './pages/OrderReview/OrderReview';
+import OrderDetails from './pages/OrderDetails/OrderDetails';
 
 
 function App() {
@@ -29,9 +30,9 @@ function App() {
               {/* cartPage */}
               <Route path="/cart" element={<CartPage/>}/>
               {/* <OrderReview page */}
-             <Route path="/orderreview" element={<OrderReview/>}/> 
-
-              
+              <Route path="/orderreview" element={<OrderReview/>}/> 
+              {/* rout OrderDetails */}
+              <Route path="/orderdetails" element={<OrderDetails/>}/> 
             </Routes>
           </div>
         </Router>
