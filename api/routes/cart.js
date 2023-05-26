@@ -24,27 +24,29 @@ router.post('/', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     
-    
     let cart = await Cart.findOne({ user }).populate('items.product');
    
     if (cart == null) {
       cart = new Cart({ user });
     }
+    
     const product = await Product.findById(req.body.productId);
     
     if (product == null) {
       return res.status(404).json({ message: 'Cannot find product' });
     }
-    const item = cart.items.find(item => item.product.toString() === product._id.toString());
-    if (item == null) {
-      cart.items.push({ product: product._id, quantity: req.body.quantity });
-    } else {
+    
+    const item = cart.items.find(item => item.product._id.toString() === product._id.toString());
+    if (item) {
       item.quantity += req.body.quantity;
+    } else {
+      cart.items.push({ product: product._id, quantity: req.body.quantity });
     }
+    
     // Calculate the total price
     let totalPrice = 0;
     for (let i = 0; i < cart.items.length; i++) {
-      totalPrice += product.price * req.body.quantity;
+      totalPrice += product.price * cart.items[i].quantity;
     }
     
     cart.totalPrice = totalPrice;
