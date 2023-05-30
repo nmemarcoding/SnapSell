@@ -27,10 +27,8 @@ CartSchema.pre('save', function(next) {
   let totalPrice = 0;
   let totalItems = 0;
   for (let i = 0; i < this.items.length; i++) {
-    totalPrice += this.items[i].product.price * this.items[i].quantity;
     totalItems += this.items[i].quantity;
   }
-  this.totalPrice = totalPrice;
   this.totalItems = totalItems;
   next();
 });

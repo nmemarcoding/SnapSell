@@ -24,35 +24,42 @@ router.post('/', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     
-    let cart = await Cart.findOne({ user }).populate('items.product');
-   
-    if (cart == null) {
-      cart = new Cart({ user });
-    }
-    
     const product = await Product.findById(req.body.productId);
     
     if (product == null) {
       return res.status(404).json({ message: 'Cannot find product' });
     }
-    
-    const item = cart.items.find(item => item.product._id.toString() === product._id.toString());
-    if (item) {
-      item.quantity += req.body.quantity;
-    } else {
-      cart.items.push({ product: product._id, quantity: req.body.quantity });
+
+    let cart = await Cart.findOne({ user }).populate('items.product');
+   
+    if (cart == null) {
+      cart = new Cart({
+        user: userId,
+        items: [{ product: productId, quantity: req.body.quantity}],
+        totalPrice: product.price * req.body.quantity,
+      });
+    }
+    else {
+      const item = cart.items.find(item => item.product._id.toString() === product._id.toString());
+      if (item) {
+        item.quantity += req.body.quantity;
+      } else {
+        
+        cart.items.push({ product: product._id, quantity: req.body.quantity });
+        
+      }
+      
+      // Calculate the total price
+      cart.totalPrice += product.price * req.body.quantity;
+     
     }
     
-    // Calculate the total price
-    let totalPrice = 0;
-    for (let i = 0; i < cart.items.length; i++) {
-      totalPrice += product.price * cart.items[i].quantity;
-    }
     
-    cart.totalPrice = totalPrice;
+   
     await cart.save();
     res.json(cart);
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: err.message });
   }
 });
@@ -84,7 +91,7 @@ router.delete('/', async (req, res) => {
     }
 
     const item = cart.items.find(item => item.product._id.toString() === productId.toString());
-    console.log(item);
+    
     if (!item) {
       return res.status(404).json({ message: 'Item not found' });
     }
