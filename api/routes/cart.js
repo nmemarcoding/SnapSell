@@ -122,9 +122,10 @@ router.delete('/', async (req, res) => {
 });
 
 // get the cart for a user by userId and populate the items with the product details
-router.get('/', async (req, res) => {
+router.post('/getcart', async (req, res) => {
   try {
     const userId = req.body.userId;
+    console.log(req.body);
     
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ message: 'Invalid userId' });
