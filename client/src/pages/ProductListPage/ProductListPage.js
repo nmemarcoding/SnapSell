@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import { publicRequest } from '../../hooks/requestMethods';
+import useStore from '../../store';
 
 export default function ProductListPage() {
   const [nameFilter, setNameFilter] = useState('');
@@ -9,6 +10,9 @@ export default function ProductListPage() {
   const [cart, setCart] = useState([]);
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  // getting user id from store
+  const userId = useStore((state) => state.userInf._id);
+
 
   useEffect(() => {
     // geting search from url.href
@@ -48,8 +52,19 @@ export default function ProductListPage() {
   });
 
   const addToCart = (product) => {
-    console.log(product._id);
-    setCart([...cart, product]);
+    publicRequest()
+      .post('cart', {
+        userId: userId,
+        productId: product._id,
+        quantity: 1,
+      })
+      .then((res) => {
+        window.alert('Added to cart');
+      })
+      .catch((err) => {
+        console.log(err);
+      }
+      );
   };
 
   const showDetails = (product) => {
