@@ -4,6 +4,8 @@ const router = express.Router();
 const Product = require('../models/product');
 const Cart = require('../models/cart');
 const User = require('../models/user');
+const {refresh} = require('../middlewear/auth.js');
+const { noSSR } = require('next/dynamic');
 
 // create a new cart item or update the quantity if the item already exists
 router.post('/', async (req, res) => {
@@ -65,12 +67,13 @@ router.post('/', async (req, res) => {
 });
 
 // delete an item from the cart by user id and product id
-router.delete('/', async (req, res) => {
-  console.log(req.body);
+router.delete('/:productId/:token',refresh, async (req, res) => {
+ 
   try {
-    const userId = req.body.userId;
-    const productId = req.body.productId;
-    const deleteQuantity = req.body.deleteQuantity;
+    
+    const userId = req.userId;
+    const productId = req.params.productId;
+    const deleteQuantity = 1;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ message: 'Invalid userId' });
@@ -127,7 +130,7 @@ router.delete('/', async (req, res) => {
 router.post('/getcart', async (req, res) => {
   try {
     const userId = req.body.userId;
-    console.log(req.body);
+  
     
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ message: 'Invalid userId' });

@@ -22,7 +22,10 @@ function admin(req, res, next) {
 
 // Create a middleware function to verify the refresh_token
 function refresh(req, res, next) {
-    const refreshToken = req.body.token;
+    
+    const refreshToken = req.params.token;
+   
+    
     if (!refreshToken) {
         return res.status(401).send({ error: 'Unauthorized' });
     }
