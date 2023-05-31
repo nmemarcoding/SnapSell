@@ -8,10 +8,12 @@ export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
   const [cartTotal, setCartTotal] = useState(0);
   const userId = useStore((state) => state.userInf._id);
+  const userToken = useStore((state) => state.userInf.accessToken);
+ 
 
   useEffect(() => {
     // Make an API call to fetch the cart items from the backend
-    publicRequest()
+    publicRequest(userToken)
       .post('cart/getcart', {userId: userId})
       .then(res => {  
         setCartItems(res.data.items);
@@ -25,23 +27,34 @@ export default function CartPage() {
   const Navigate = useNavigate();
 
   const handleQuantityChange = (itemId, action) => {
-    setCartItems(prevCartItems => {
-      return prevCartItems.map(item => {
-        if (item._id === itemId) {
-          if (action === 'increase') {
-            return { ...item, quantity: item.quantity + 1 };
-          } else if (action === 'decrease') {
-            const newQuantity = item.quantity - 1;
-            if (newQuantity === 0) {
-              return null; // remove the item from the cart
-            } else {
-              return { ...item, quantity: newQuantity };
-            }
-          }
+   
+      if(action === 'decrease'){
+       
+      publicRequest(userToken)
+        .delete(`cart/${itemId}/${userToken}`, {userId: userId, productId: itemId,deleteQuantity:1})
+        .then(res => {
+          window.location.reload();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      // Update the quantity of the item
+      publicRequest()
+        .post(`cart`, {userId: userId, productId: itemId, quantity: 1})
+        .then(res => {
+          // refresh the page
+          window.location.reload();
         }
-        return item;
-      }).filter(Boolean); // remove null items from the array
-    });
+        )
+        .catch(err => {
+          console.log(err);
+        }
+        );
+
+          
+         
+    }
   };
 
   const handleCheckout = () => {
@@ -72,9 +85,9 @@ export default function CartPage() {
                   <h2 className="text-lg font-bold mb-2">{item.product.title}</h2>
                   <p className="text-gray-700 mb-2">Price: ${item.product.price.toFixed(2)}</p>
                   <div className="flex items-center mb-2">
-                    <button className="bg-gray-200 text-gray-700 px-2 py-1 rounded-lg mr-2" onClick={() => handleQuantityChange(item._id, 'decrease')}>-</button>
+                    <button className="bg-gray-200 text-gray-700 px-2 py-1 rounded-lg mr-2" onClick={() => handleQuantityChange(item.product._id, 'decrease')}>-</button>
                     <span>{item.quantity}</span>
-                    <button className="bg-gray-200 text-gray-700 px-2 py-1 rounded-lg ml-2" onClick={() => handleQuantityChange(item._id, 'increase')}>+</button>
+                    <button className="bg-gray-200 text-gray-700 px-2 py-1 rounded-lg ml-2" onClick={() => handleQuantityChange(item.product._id, 'increase')}>+</button>
                   </div>
                   <p className="text-gray-700 font-bold">Total: ${(item.quantity * item.product.price).toFixed(2)}</p>
                 </div>
