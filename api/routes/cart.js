@@ -116,6 +116,7 @@ router.delete('/', async (req, res) => {
     await cart.save();
     res.json(cart);
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: err.message });
    
   }
