@@ -4,16 +4,17 @@ import Navbar from '../../components/Navbar/Navbar';
 import { publicRequest } from '../../hooks/requestMethods';
 import store from '../../store';
 
+
 export default function OrderReview() {
   const [orderSummary, setOrderSummary] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('credit-card');
   const [shippingAddress, setShippingAddress] = useState({
-    name: '',
     address: '',
     city: '',
     state: '',
     zip: ''
   });
+
   const userId = store.getState().userInf._id;
   const userToken = store.getState().userInf.accessToken;
 
@@ -27,12 +28,22 @@ export default function OrderReview() {
       ...prevState,
       [name]: value
     }));
+    console.log(`${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.state} ${shippingAddress.zip}`)
+    
   };
 
   const Navigate = useNavigate();
 
   const handlePlaceOrderClick = () => {
-    Navigate('/orderdetails');
+    publicRequest()
+    .post('order', {userId: userId, paymentMethod: paymentMethod, shippingAddress: `${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.state} ${shippingAddress.zip}`})
+    .then(res => {
+     Navigate('/orderdetails');
+    })
+    .catch(err => {
+      console.log(err);
+    }
+    );
   };
 
   useEffect(() => {
@@ -79,19 +90,6 @@ export default function OrderReview() {
         </div>
         <div className="mt-6">
           <h2 className="text-2xl font-bold mb-4">Shipping Address</h2>
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={shippingAddress.name}
-              onChange={handleShippingAddressChange}
-              className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border"
-            />
-          </div>
           <div className="mb-4">
             <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
               Address
