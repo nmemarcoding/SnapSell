@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const authRoute = require("./routes/auth.js");
 const productRoute = require("./routes/product.js");
 const cartRoute = require("./routes/cart.js");
+const orderRoute = require("./routes/order.js");
 
 require('dotenv').config();
 
@@ -26,6 +27,7 @@ mongoose
 app.use("/api/auth", authRoute);
 app.use("/api/product", productRoute);
 app.use("/api/cart", cartRoute);
+app.use("/api/order", orderRoute);
 
 const port = process.env.PORT || 3002;
 
