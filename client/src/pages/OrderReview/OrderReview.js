@@ -38,7 +38,7 @@ export default function OrderReview() {
     publicRequest()
     .post('order', {userId: userId, paymentMethod: paymentMethod, shippingAddress: `${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.state} ${shippingAddress.zip}`})
     .then(res => {
-     Navigate('/orderdetails');
+      Navigate(`/orderdetails?orderNumber=${res.data._id}`);
     })
     .catch(err => {
       console.log(err);
