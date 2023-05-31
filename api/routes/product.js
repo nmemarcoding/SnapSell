@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Product = require('../models/product.js');
-const admin = require('../middlewear/auth.js');
+const {admin} = require('../middlewear/auth.js');
 
 
 // creat a product with auth middleware

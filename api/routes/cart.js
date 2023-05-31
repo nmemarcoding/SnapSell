@@ -66,6 +66,7 @@ router.post('/', async (req, res) => {
 
 // delete an item from the cart by user id and product id
 router.delete('/', async (req, res) => {
+  console.log(req.body);
   try {
     const userId = req.body.userId;
     const productId = req.body.productId;
