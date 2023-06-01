@@ -66,7 +66,16 @@ router.get('/:orderNumber', async (req, res) => {
     }
   });
     
-
-
+  
+  // get all orders by user id
+    router.get('/user/:userId', async (req, res) => {
+    try {
+        const orders = await Order.find({ user: req.params.userId }).populate('items.product');
+        res.json(orders);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json('Internal Server Error');
+    }
+    });
 
 module.exports = router;
