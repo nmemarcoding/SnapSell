@@ -1,13 +1,24 @@
-import React from 'react'
-import AdminNavbar from '../../components/AdminNavbar/AdminNavbar'
-
-const orders = [
-  { id: 1, customer: 'John Doe', product: 'Widget', quantity: 2, total: 100 },
-  { id: 2, customer: 'Jane Smith', product: 'Gadget', quantity: 1, total: 50 },
-  { id: 3, customer: 'Bob Johnson', product: 'Thingamajig', quantity: 3, total: 200 },
-]
+import React, { useState, useEffect } from 'react';
+import AdminNavbar from '../../components/AdminNavbar/AdminNavbar';
+import { publicRequest } from '../../hooks/requestMethods';
+import store from '../../store';
 
 export default function OrdersPage() {
+  const [orders, setOrders] = useState([]);
+  const token = store.getState().userInf.accessToken;
+
+  useEffect(() => {
+    publicRequest()
+      .get(`order?token=${token}`)
+      .then(response => {
+        console.log(response);
+        setOrders(response.data); // Extract the data property from the response
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
   return (
     <>
       <AdminNavbar />
@@ -17,17 +28,17 @@ export default function OrdersPage() {
           <table className="w-full border-collapse">
             <thead>
               <tr>
-                <th className="p-2 border">ID</th>
                 <th className="p-2 border">Customer</th>
                 <th className="p-2 border">Quantity</th>
+                <th className="p-2 border">Status</th>
               </tr>
             </thead>
             <tbody>
-              {orders.map(order => (
-                <tr key={order.id} className="hover:bg-gray-100">
-                  <td className="p-2 border">{order.id}</td>
-                  <td className="p-2 border">{order.customer}</td>
-                  <td className="p-2 border">{order.quantity}</td>
+              {orders.map((order, index) => (
+                <tr key={index} className="hover:bg-gray-100">
+                  <td className="p-2 border">{order.user.email}</td>
+                  <td className="p-2 border">{order.items.length}</td>
+                  <td className="p-2 border">{order.status}</td>
                 </tr>
               ))}
             </tbody>
@@ -35,5 +46,5 @@ export default function OrdersPage() {
         </div>
       </div>
     </>
-  )
+  );
 }
