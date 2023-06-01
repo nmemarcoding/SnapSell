@@ -2,7 +2,9 @@ const jwt = require('jsonwebtoken');
 
 // Create a middleware function to verify the access_token
 function admin(req, res, next) {
-    const accessToken = req.body.token;
+   
+    const accessToken = req.query.token;
+
     if (!accessToken) {
         return res.status(401).send({ error: 'Unauthorized' });
     }

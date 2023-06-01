@@ -24,7 +24,7 @@ router.post('/', admin, async (req, res) => {
 );
 
 // get all products
-router.get('/', async (req, res) => {
+router.get('/',admin, async (req, res) => {
     try {
         const products = await Product.find();
         res.status(200).json(products);
@@ -51,7 +51,7 @@ router.get('/:search', async (req, res) => {
 });
 
 // delete a product with auth middleware and product id
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',admin, async (req, res) => {
     try {
        
         const product = await Product.findByIdAndDelete(req.params.id);
