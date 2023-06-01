@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import AdminNavbar from '../../components/AdminNavbar/AdminNavbar';
 import { publicRequest } from '../../hooks/requestMethods';
 import store from '../../store';
@@ -11,7 +12,6 @@ export default function OrdersPage() {
     publicRequest()
       .get(`order?token=${token}`)
       .then(response => {
-        console.log(response);
         setOrders(response.data); // Extract the data property from the response
       })
       .catch(error => {
@@ -31,6 +31,7 @@ export default function OrdersPage() {
                 <th className="p-2 border">Customer</th>
                 <th className="p-2 border">Quantity</th>
                 <th className="p-2 border">Status</th>
+                <th className="p-2 border"></th>
               </tr>
             </thead>
             <tbody>
@@ -39,6 +40,14 @@ export default function OrdersPage() {
                   <td className="p-2 border">{order.user.email}</td>
                   <td className="p-2 border">{order.items.length}</td>
                   <td className="p-2 border">{order.status}</td>
+                  <td className="p-2 border">
+                    <Link
+                      to={`/admin/order/processing?id=${order._id}`}
+                      className="text-blue-500 hover:text-blue-700"
+                    >
+                      Start
+                    </Link>
+                  </td>
                 </tr>
               ))}
             </tbody>
