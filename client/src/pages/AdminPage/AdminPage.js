@@ -1,41 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AdminNavbar from "../../components/AdminNavbar/AdminNavbar";
-const initialProducts = [
-  {
-    id: 1,
-    title: "Product 1",
-    description: "This is the first product",
-    image: "https://example.com/product1.jpg",
-    category: "Category 1",
-    price: 10.99,
-  },
-  {
-    id: 2,
-    title: "Product 2",
-    description: "This is the second product",
-    image: "https://example.com/product2.jpg",
-    category: "Category 2",
-    price: 19.99,
-  },
-  {
-    id: 3,
-    title: "Product 3",
-    description: "This is the third product",
-    image: "https://example.com/product3.jpg",
-    category: "Category 1",
-    price: 5.99,
-  },
-  // Add more products here
-];
+import { publicRequest } from "../../hooks/requestMethods";
 
 export default function AdminPage() {
-  
   const [formData, setFormData] = useState({
     title: "",
     category: "",
     price: "",
     searchQuery: "",
   });
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+   try{
+    publicRequest()
+      .get("product")
+      .then((res) => {
+        setProducts(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+   }
+    catch(err){
+      console.log(err);
+    }
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -47,7 +38,7 @@ export default function AdminPage() {
     // Delete product with given ID from server
   };
 
-  const filteredProducts = initialProducts.filter((product) =>
+  const filteredProducts = products.filter((product) =>
     product.title.toLowerCase().includes(formData.searchQuery.toLowerCase())
   );
 
@@ -62,7 +53,8 @@ export default function AdminPage() {
 
   return (
     <>
-      <AdminNavbar/>
+      <AdminNavbar />
+      <br></br>
       <form
         onSubmit={handleSubmit}
         className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md"
@@ -110,13 +102,12 @@ export default function AdminPage() {
           </label>
           <textarea
             id="description"
-            name="description"
+            name="desc"
             value={formData.description}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
           />
         </dive>
-
 
         <div className="mb-4">
           <label
