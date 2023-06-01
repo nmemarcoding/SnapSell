@@ -35,7 +35,8 @@ export default function OrdersPage() {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order, index) => (
+              {orders.map((order, index,ss) => (
+               
                 <tr key={index} className="hover:bg-gray-100">
                   <td className="p-2 border">{order.user.email}</td>
                   <td className="p-2 border">{order.items.length}</td>
