@@ -38,6 +38,7 @@ export default function AdminPage() {
       .post("product", formData)
       .then((res) => {
         alert("Product added successfully!");
+        window.location.reload();
         
       })
       .catch((err) => {
@@ -48,6 +49,18 @@ export default function AdminPage() {
 
   const handleDelete = (productId) => {
     // Delete product with given ID from server
+    ;
+    publicRequest()
+      .delete(`product/${productId}`)
+      .then((res) => {
+        alert("Product deleted successfully!");
+        window.location.reload();
+      }
+      )
+      .catch((err) => {
+        console.log(err);
+      }
+      );
   };
 
   const filteredProducts = products.filter((product) =>
@@ -178,11 +191,11 @@ export default function AdminPage() {
               {filteredProducts.map((product) => (
                 <tr key={product._id}>
                   <td className="border px-4 py-2">{product.title}</td>
-                  <td className="border px-4 py-2">{product.category}</td>
+                  <td className="border px-4 py-2">{product.categories}</td>
                   <td className="border px-4 py-2">${product.price}</td>
                   <td className="border px-4 py-2">
                     <button
-                      onClick={() => handleDelete(product.id)}
+                      onClick={() => handleDelete(product._id)}
                       className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600"
                     >
                       Delete
