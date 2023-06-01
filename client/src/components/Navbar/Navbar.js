@@ -8,7 +8,7 @@ const navigation = [
   { name: 'Shop', href: '#' },
   { name: 'Categories', href: '#' },
   { name: 'Deals', href: '#' },
-  { name: 'About', href: '#' },
+  { name: 'Order History', href: '/orderhistory' },
 ];
 
 export default function Navbar() {
