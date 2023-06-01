@@ -11,12 +11,12 @@ import OrderReview from './pages/OrderReview/OrderReview';
 import OrderDetails from './pages/OrderDetails/OrderDetails';
 import OrderHistory from './pages/OrderHistory/OrderHistory';
 import AdminOrderPage from './pages/AdminOrderPage/AdminOrderPage';
+import AdminOrderProcessingPage from './pages/AdminOrderProcessingPage/AdminOrderProcessingPage';
 
 
 function App() {
   // getting user info from useStore
   const userInfo = useStore((state) => state.userInf)
-  
 
   return (
     <Router>
@@ -35,6 +35,10 @@ function App() {
               {/* show admin oage if use risAmin is true */}
               {userInfo.isAdmin ? (<Route path="/admin/order" element={<AdminOrderPage />} />
                 ) : ( <Route path="/admin/order" element={<Navigate to="/" replace />} />)}
+
+              {/* cartPage */}
+              {userInfo.isAdmin ? (<Route path="/admin/order/processing" element={ <AdminOrderProcessingPage/>} />
+                ) : ( <Route path="/admin/order/processing" element={<Navigate to="/" replace />} />)}
 
               {/* cartPage */}
               <Route path="/cart" element={<CartPage/>}/>
