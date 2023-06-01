@@ -8,6 +8,7 @@ import ProductListPage from './pages/ProductListPage/ProductListPage';
 import CartPage from './pages/CartPage/CartPage';
 import OrderReview from './pages/OrderReview/OrderReview';
 import OrderDetails from './pages/OrderDetails/OrderDetails';
+import OrderHistory from './pages/OrderHistory/OrderHistory';
 
 
 function App() {
@@ -33,6 +34,8 @@ function App() {
               <Route path="/orderreview" element={<OrderReview/>}/> 
               {/* rout OrderDetails */}
               <Route path="/orderdetails" element={<OrderDetails/>}/> 
+              {/* route orderHistory */}
+              <Route path="/orderhistory" element={<OrderHistory/>}/>
             </Routes>
           </div>
         </Router>
