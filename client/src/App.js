@@ -10,6 +10,7 @@ import CartPage from './pages/CartPage/CartPage';
 import OrderReview from './pages/OrderReview/OrderReview';
 import OrderDetails from './pages/OrderDetails/OrderDetails';
 import OrderHistory from './pages/OrderHistory/OrderHistory';
+import AdminOrderPage from './pages/AdminOrderPage/AdminOrderPage';
 
 
 function App() {
@@ -30,6 +31,11 @@ function App() {
               {/* show admin oage if use risAmin is true */}
               {userInfo.isAdmin ? (<Route path="/admin" element={<AdminPage />} />
                 ) : ( <Route path="/admin" element={<Navigate to="/" replace />} />)}
+              
+              {/* show admin oage if use risAmin is true */}
+              {userInfo.isAdmin ? (<Route path="/admin/order" element={<AdminOrderPage />} />
+                ) : ( <Route path="/admin/order" element={<Navigate to="/" replace />} />)}
+
               {/* cartPage */}
               <Route path="/cart" element={<CartPage/>}/>
               {/* <OrderReview page */}
