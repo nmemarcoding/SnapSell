@@ -10,16 +10,16 @@ export default function AdminPage() {
     price: "",
     img:"test",
     searchQuery: "",
-    token:store.getState().userInf.accessToken,
+    
   });
   
  
   const [products, setProducts] = useState([]);
-
+  const token=store.getState().userInf.accessToken
   useEffect(() => {
    try{
     publicRequest()
-      .get("product")
+      .get(`product?token=${token}`)
       .then((res) => {
         setProducts(res.data);
       })
@@ -35,7 +35,7 @@ export default function AdminPage() {
   const handleSubmit = (event) => {
     event.preventDefault();
     publicRequest()
-      .post("product", formData)
+      .post(`product?token=${token}`, formData)
       .then((res) => {
         alert("Product added successfully!");
         window.location.reload();
@@ -51,7 +51,7 @@ export default function AdminPage() {
     // Delete product with given ID from server
     ;
     publicRequest()
-      .delete(`product/${productId}`)
+      .delete(`product/${productId}?token=${token}`)
       .then((res) => {
         alert("Product deleted successfully!");
         window.location.reload();
