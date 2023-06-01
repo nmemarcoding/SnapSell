@@ -4,7 +4,7 @@ const User = require('../models/user.js');
 const Cart = require('../models/cart.js');
 const Order = require('../models/order.js');
 const { default: mongoose } = require('mongoose');
-
+const {admin} = require('../middlewear/auth.js');
 // creat order route
 router.post('/', async (req, res) => {
     try {
@@ -77,5 +77,19 @@ router.get('/:orderNumber', async (req, res) => {
         res.status(500).json('Internal Server Error');
     }
     });
+
+     // get all orders also populate only user email also populate product also sort that having pending order to the top
+    router.get('/',admin, async (req, res) => {
+        try {
+            const orders = await Order.find({}).populate('user', 'email').populate('items.product').sort({ status: 1 });
+            res.json(orders);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json('Internal Server Error');
+        }
+    });
+    
+        
+        
 
 module.exports = router;
