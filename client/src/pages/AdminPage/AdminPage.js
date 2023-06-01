@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import AdminNavbar from "../../components/AdminNavbar/AdminNavbar";
 import { publicRequest } from "../../hooks/requestMethods";
+import store from "../../store";
 
 export default function AdminPage() {
   const [formData, setFormData] = useState({
     title: "",
-    category: "",
+    categories: "",
     price: "",
+    img:"test",
     searchQuery: "",
+    token:store.getState().userInf.accessToken,
   });
-
+  
+ 
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -30,7 +34,15 @@ export default function AdminPage() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
+    publicRequest()
+      .post("product", formData)
+      .then((res) => {
+        alert("Product added successfully!");
+        
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     // Send form data to server for processing
   };
 
@@ -48,7 +60,7 @@ export default function AdminPage() {
       ...prevFormData,
       [name]: value,
     }));
-    console.log(formData);
+   
   };
 
   return (
@@ -78,16 +90,16 @@ export default function AdminPage() {
 
         <div className="mb-4">
           <label
-            htmlFor="category"
+            htmlFor="categories"
             className="block text-gray-700 font-bold mb-2"
           >
             Product Category:
           </label>
           <input
             type="text"
-            id="category"
-            name="category"
-            value={formData.category}
+            id="categories"
+            name="categories"
+            value={formData.categories}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
           />
@@ -164,7 +176,7 @@ export default function AdminPage() {
             </thead>
             <tbody>
               {filteredProducts.map((product) => (
-                <tr key={product.id}>
+                <tr key={product._id}>
                   <td className="border px-4 py-2">{product.title}</td>
                   <td className="border px-4 py-2">{product.category}</td>
                   <td className="border px-4 py-2">${product.price}</td>
