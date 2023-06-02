@@ -88,7 +88,28 @@ router.get('/:orderNumber', async (req, res) => {
             res.status(500).json('Internal Server Error');
         }
     });
-    
+
+    // update order status
+    router.put('/:orderNumber', async (req, res) => {
+        try {
+            // cheack if order number is valid
+            if (!mongoose.Types.ObjectId.isValid(req.params.orderNumber)) {
+                return res.status(400).json('Invalid order number');
+            }
+            const order = await Order.findOne({ _id: req.params.orderNumber });
+            if (!order) {
+                return res.status(404).json('Order not found');
+            }
+            order.status = req.body.status;
+            await order.save();
+            res.json(order);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json('Internal Server Error');
+        }
+    });
+
+
         
         
 
