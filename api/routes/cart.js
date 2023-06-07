@@ -5,7 +5,7 @@ const Product = require('../models/product');
 const Cart = require('../models/cart');
 const User = require('../models/user');
 const {refresh} = require('../middlewear/auth.js');
-const { noSSR } = require('next/dynamic');
+
 
 // create a new cart item or update the quantity if the item already exists
 router.post('/', async (req, res) => {
