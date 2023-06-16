@@ -52,6 +52,10 @@ export default function ProductListPage() {
   });
 
   const addToCart = (product) => {
+    // if user id is undefined then navigate to login page
+    if (userId === undefined) {
+      window.location.href = '/login';
+    }
     publicRequest()
       .post('cart', {
         userId: userId,
