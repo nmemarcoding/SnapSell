@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Dialog } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import useStore from '../../store';
 
@@ -27,7 +27,7 @@ export default function Navbar() {
 
   const handleSearch = (event) => {
     event.preventDefault(); // prevent the default form submission behavior
-    setSearchQuery(event.target.value); 
+    setSearchQuery(event.target.value);
     window.location.href = `/Product/${searchQuery}`; // redirect to the Product/:value page
   };
 
@@ -41,13 +41,10 @@ export default function Navbar() {
 
   return (
     <header className="">
-        
       <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
-        
         <div className="flex lg:flex-1">
-          
           <Link to="/" className="text-sm font-semibold leading-6 text-gray-900">
-          <span className="sr-only">Your Company</span>
+            <span className="sr-only">Your Company</span>
             <img
               className="h-8 w-auto"
               src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
@@ -58,7 +55,6 @@ export default function Navbar() {
         <div className="hidden lg:block mr-4">
           <div className="relative rounded-md shadow-sm">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-
               <label htmlFor="search" className="sr-only">
                 Search
               </label>
@@ -77,7 +73,23 @@ export default function Navbar() {
           </div>
         </div>
         <div className="flex lg:hidden">
-            
+          <Link to="/cart" className=" text-gray-700">
+            <button
+              type="button"
+              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 mr-4"
+              
+            >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+              <path fill="none" d="M0 0h24v24H0z"/>
+              <path d="M3 6h2.4l2.52 8.4c.108.36.468.6.852.6h8.592c.384 0 .744-.24.852-.6L18.6 8H7.8"/>
+              <circle cx="8.5" cy="21.5" r="1.5"/>
+              <circle cx="16.5" cy="21.5" r="1.5"/>
+              <path d="M6 10h12"/>
+            </svg>
+            <span className="ml-1">{cartQuantity}</span>
+            </button>
+          </Link>
+          
           <button
             type="button"
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
@@ -86,9 +98,7 @@ export default function Navbar() {
             <span className="sr-only">Open main menu</span>
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
-          
         </div>
-        
         <div className="hidden lg:flex lg:gap-x-12">
           {navigation.map((item) => (
             <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-900">
@@ -97,9 +107,21 @@ export default function Navbar() {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link to="/cart" className="text-sm font-semibold leading-6 text-gray-900 mr-40">
-            <span aria-hidden="true">Cart</span>
-            <span className="ml-1">{cartCount}</span>
+          <Link to="/cart" className=" text-gray-700">
+                <button
+                  type="button"
+                  className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 mr-4"
+                  
+                >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                  <path fill="none" d="M0 0h24v24H0z"/>
+                  <path d="M3 6h2.4l2.52 8.4c.108.36.468.6.852.6h8.592c.384 0 .744-.24.852-.6L18.6 8H7.8"/>
+                  <circle cx="8.5" cy="21.5" r="1.5"/>
+                  <circle cx="16.5" cy="21.5" r="1.5"/>
+                  <path d="M6 10h12"/>
+                </svg>
+                <span className="ml-1">{cartQuantity}</span>
+                </button>
           </Link>
           {isLoggedIn ? (
             <a href="#" className="text-sm font-semibold leading-6 text-gray-900" onClick={handleLogout}>
@@ -111,7 +133,6 @@ export default function Navbar() {
             </a>
           )}
         </div>
-        
       </nav>
       <Dialog as="div" className="" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
         <div className="fixed inset-0 z-50" />
@@ -149,9 +170,21 @@ export default function Navbar() {
             </ul>
           </div>
           <div className="mt-6">
-            <Link to="/cart" className="block px-4 py-3 text-sm font-semibold leading-6 text-gray-900">
-              <span aria-hidden="true">Cart</span>
+            <Link to="/cart" className=" text-gray-700">
+              <button
+                type="button"
+                className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 mr-4"
+                
+              >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path fill="none" d="M0 0h24v24H0z"/>
+                <path d="M3 6h2.4l2.52 8.4c.108.36.468.6.852.6h8.592c.384 0 .744-.24.852-.6L18.6 8H7.8"/>
+                <circle cx="8.5" cy="21.5" r="1.5"/>
+                <circle cx="16.5" cy="21.5" r="1.5"/>
+                <path d="M6 10h12"/>
+              </svg>
               <span className="ml-1">{cartQuantity}</span>
+              </button>
             </Link>
           </div>
           <div className="mt-6">
@@ -168,7 +201,6 @@ export default function Navbar() {
           <div className="mt-6">
             <div className="relative rounded-md shadow-sm">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                
                 <label htmlFor="search" className="sr-only">
                   Search
                 </label>
