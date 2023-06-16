@@ -12,6 +12,7 @@ export default function ProductListPage() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   // getting user id from store
   const userId = useStore((state) => state.userInf._id);
+  const setCartQuantity = useStore((state) => state.setCartQuantity);
 
 
   useEffect(() => {
@@ -64,6 +65,7 @@ export default function ProductListPage() {
       })
       .then((res) => {
         window.alert('Added to cart');
+        setCartQuantity();
       })
       .catch((err) => {
         console.log(err);

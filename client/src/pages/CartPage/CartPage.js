@@ -9,6 +9,8 @@ export default function CartPage() {
   const [cartTotal, setCartTotal] = useState(0);
   const userId = useStore((state) => state.userInf._id);
   const userToken = useStore((state) => state.userInf.accessToken);
+  const setCartQuantity = useStore((state) => state.setCartQuantity);
+  const deccrementCartQuantity = useStore((state) => state.deccrementCartQuantity);
  
 
   useEffect(() => {
@@ -29,10 +31,12 @@ export default function CartPage() {
   const handleQuantityChange = (itemId, action) => {
    
       if(action === 'decrease'){
+ 
        
       publicRequest(userToken)
         .delete(`cart/${itemId}/${userToken}`, {userId: userId, productId: itemId,deleteQuantity:1})
         .then(res => {
+          deccrementCartQuantity();
           window.location.reload();
         })
         .catch(err => {
@@ -41,9 +45,11 @@ export default function CartPage() {
     } else {
       // Update the quantity of the item
       publicRequest()
+
         .post(`cart`, {userId: userId, productId: itemId, quantity: 1})
         .then(res => {
           // refresh the page
+          setCartQuantity();
           window.location.reload();
         }
         )

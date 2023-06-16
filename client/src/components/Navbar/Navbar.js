@@ -13,6 +13,7 @@ const navigation = [
 
 export default function Navbar() {
   const userInfo = useStore((state) => state.userInf);
+  const cartQuantity = useStore((state) => state.cartQuantity);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(!!userInfo._id);
   const [searchQuery, setSearchQuery] = useState('');
@@ -150,7 +151,7 @@ export default function Navbar() {
           <div className="mt-6">
             <Link to="/cart" className="block px-4 py-3 text-sm font-semibold leading-6 text-gray-900">
               <span aria-hidden="true">Cart</span>
-              <span className="ml-1">{cartCount}</span>
+              <span className="ml-1">{cartQuantity}</span>
             </Link>
           </div>
           <div className="mt-6">
